@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useMarketDataStore } from '@/store/marketData';
 import { useTradingStore } from '@/store/trading';
-import { OrderType, OrderSide, TimeInForce, OrderRequest } from '../lib/types';
+import type { OrderType, OrderSide, TimeInForce, OrderRequest } from '@/lib/types';
 
 export default function OrderPlacement() {
   const { currentSymbol, markPrice } = useMarketDataStore();

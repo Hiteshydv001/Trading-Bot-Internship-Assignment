@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { create } from 'zustand';
 import { accountAPI } from '@/services/api';
-import { Balance, AccountInfo, Position } from '../lib/types';
+import type { Balance, AccountInfo, Position } from '@/lib/types';
 
 interface AccountState {
   balance: Balance[];

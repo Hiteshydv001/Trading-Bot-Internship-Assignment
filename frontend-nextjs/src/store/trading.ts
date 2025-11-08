@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { create } from 'zustand';
 import { ordersAPI, strategiesAPI } from '@/services/api';
-import {
+import type {
   Order,
   OrderRequest,
   Strategy,
   StrategyRequest,
   PlaceOrderResponse,
   StopStrategyResponse,
-} from '../lib/types';
+} from '@/lib/types';
 import { useAccountStore } from '@/store/account';
 
 interface TradingState {
