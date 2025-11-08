@@ -1,4 +1,4 @@
-type MessageHandler = (data: any) => void;
+type MessageHandler = (data: unknown) => void;
 
 class WebSocketClient {
   private ws: WebSocket | null = null;
@@ -27,13 +27,17 @@ class WebSocketClient {
 
       this.ws.onmessage = (event) => {
         try {
-          const data = JSON.parse(event.data);
-          console.log('WebSocket message:', data);
-          
-          if (data.type) {
-            this.emit(data.type, data.data || data);
+          const parsed: unknown = JSON.parse(event.data);
+          console.log('WebSocket message:', parsed);
+
+          if (typeof parsed === 'object' && parsed !== null) {
+            const payload = parsed as { type?: string; data?: unknown } & Record<string, unknown>;
+            if (typeof payload.type === 'string') {
+              this.emit(payload.type, payload.data ?? payload);
+            }
           }
-          this.emit('message', data);
+
+          this.emit('message', parsed);
         } catch (error) {
           console.error('Error parsing WebSocket message:', error);
         }
@@ -72,9 +76,13 @@ class WebSocketClient {
     }
   }
 
-  send(data: any): void {
+  send(data: unknown): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify(data));
+      if (typeof data === 'string') {
+        this.ws.send(data);
+      } else {
+        this.ws.send(JSON.stringify(data));
+      }
     } else {
       console.warn('WebSocket is not connected');
     }
@@ -97,7 +105,7 @@ class WebSocketClient {
     }
   }
 
-  private emit(event: string, data: any): void {
+  private emit(event: string, data: unknown): void {
     const handlers = this.listeners.get(event);
     if (handlers) {
       handlers.forEach(handler => handler(data));

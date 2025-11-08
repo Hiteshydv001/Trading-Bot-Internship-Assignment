@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { create } from 'zustand';
 import { accountAPI } from '@/services/api';
 import { Balance, AccountInfo, Position } from '@/lib/types';
@@ -45,9 +46,14 @@ export const useAccountStore = create<AccountState>((set, get) => ({
         0
       );
       set({ balance, totalBalance, totalUnrealizedPnL, loading: false });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error fetching balance:', error);
-      set({ error: error.message || 'Failed to fetch balance', loading: false });
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.detail ?? error.message
+        : error instanceof Error
+        ? error.message
+        : 'Failed to fetch balance';
+      set({ error: message, loading: false });
     }
   },
 
@@ -61,9 +67,14 @@ export const useAccountStore = create<AccountState>((set, get) => ({
         0
       );
       set({ positions, totalUnrealizedPnL, loading: false });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error fetching positions:', error);
-      set({ error: error.message || 'Failed to fetch positions', loading: false });
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.detail ?? error.message
+        : error instanceof Error
+        ? error.message
+        : 'Failed to fetch positions';
+      set({ error: message, loading: false });
     }
   },
 

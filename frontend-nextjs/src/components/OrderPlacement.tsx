@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useMarketDataStore } from '@/store/marketData';
 import { useTradingStore } from '@/store/trading';
-import { OrderType, OrderSide, TimeInForce } from '@/lib/types';
+import { OrderType, OrderSide, TimeInForce, OrderRequest } from '@/lib/types';
 
 export default function OrderPlacement() {
   const { currentSymbol, markPrice } = useMarketDataStore();
@@ -61,7 +61,7 @@ export default function OrderPlacement() {
     }
 
     try {
-      const orderData: any = {
+      const orderData: OrderRequest = {
         symbol: currentSymbol,
         side: orderForm.side,
         type: orderForm.type,
@@ -87,8 +87,9 @@ export default function OrderPlacement() {
         price: '',
         stopPrice: '',
       });
-    } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || 'Failed to place order' });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to place order';
+      setMessage({ type: 'error', text: errorMessage });
     }
   };
 

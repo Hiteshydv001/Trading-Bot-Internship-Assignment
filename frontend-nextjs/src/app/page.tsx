@@ -24,19 +24,30 @@ export default function DashboardPage() {
     fetchPositions();
     fetchOpenOrders();
     fetchActiveStrategies();
-  pollAccount();
+    pollAccount();
 
     // Connect WebSocket with symbol-specific endpoint
     const wsBaseUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000/ws';
     const wsUrl = `${wsBaseUrl}/market_data/${currentSymbol}`;
     connectWebSocket(wsUrl);
 
-    // Cleanup on unmount
+    // Cleanup on unmount or symbol change
     return () => {
       useMarketDataStore.getState().disconnectWebSocket();
       stopPolling();
     };
-  }, []);
+  }, [
+    connectWebSocket,
+    currentSymbol,
+    fetchActiveStrategies,
+    fetchBalance,
+    fetchKlines,
+    fetchMarkPrice,
+    fetchOpenOrders,
+    fetchPositions,
+    pollAccount,
+    stopPolling,
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -1,8 +1,13 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { Kline } from '@/lib/types';
 
-export default function SimpleChart({ klines }: { klines: any[] }) {
+interface SimpleChartProps {
+  klines: Kline[];
+}
+
+export default function SimpleChart({ klines }: SimpleChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

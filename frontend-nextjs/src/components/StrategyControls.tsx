@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useMarketDataStore } from '@/store/marketData';
 import { useTradingStore } from '@/store/trading';
-import { Strategy } from '@/lib/types';
 
 const STRATEGY_TYPES = [
   {
@@ -45,14 +44,7 @@ export default function StrategyControls() {
     return () => clearInterval(interval);
   }, [fetchActiveStrategies]);
 
-  type ActiveStrategy = Strategy & {
-    active?: boolean;
-    message?: string;
-    last_action?: string;
-    last_update?: number;
-  };
-
-  const strategies = activeStrategies as ActiveStrategy[];
+  const strategies = activeStrategies;
 
   const handleStart = async () => {
     setMessage(null);
@@ -82,9 +74,10 @@ export default function StrategyControls() {
         quantity_per_trade: parseFloat(quantityPerTrade),
       });
       setMessage({ type: 'success', text: `Strategy "${strategyName}" started successfully!` });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error starting strategy:', error);
-      setMessage({ type: 'error', text: error.message || 'Failed to start strategy' });
+      const errorMessage = error instanceof Error ? error.message : 'Failed to start strategy';
+      setMessage({ type: 'error', text: errorMessage });
     }
   };
 
@@ -94,9 +87,10 @@ export default function StrategyControls() {
     try {
       await stopStrategy(name);
       setMessage({ type: 'success', text: 'Strategy stopped successfully!' });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error stopping strategy:', error);
-      setMessage({ type: 'error', text: error.message || 'Failed to stop strategy' });
+      const errorMessage = error instanceof Error ? error.message : 'Failed to stop strategy';
+      setMessage({ type: 'error', text: errorMessage });
     }
   };
 
@@ -213,14 +207,14 @@ export default function StrategyControls() {
 
         <section className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Active Strategies</p>
-          {strategies.filter((strategy) => strategy.active ?? strategy.status === 'active').length === 0 && (
+          {strategies.filter((strategy) => strategy.active).length === 0 && (
             <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
               No active bots at the moment.
             </div>
           )}
 
           {strategies
-            .filter((strategy) => strategy.active ?? strategy.status === 'active')
+            .filter((strategy) => strategy.active)
             .map((strategy) => (
               <article
                 key={strategy.name}
