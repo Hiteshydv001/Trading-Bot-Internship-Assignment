@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Kline } from '@/lib/types';
+import { Kline } from '../lib/types';
 
 interface SimpleChartProps {
   klines: Kline[];

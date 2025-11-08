@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 import { marketDataAPI } from '@/services/api';
 import WebSocketClient from '@/services/websocket';
-import { MarkPrice, Kline, PriceUpdate } from '@/lib/types';
+import { MarkPrice, Kline, PriceUpdate } from '../lib/types';
 
 interface MarketDataState {
   currentSymbol: string;

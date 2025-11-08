@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { createChart, IChartApi, ISeriesApi, UTCTimestamp } from 'lightweight-charts';
-import { Kline } from '@/lib/types';
+import { Kline } from '../lib/types';
 
 interface RealtimeChartClientProps {
   klines: Kline[];

@@ -8,7 +8,7 @@ import {
   StrategyRequest,
   PlaceOrderResponse,
   StopStrategyResponse,
-} from '@/lib/types';
+} from '../lib/types';
 import { useAccountStore } from '@/store/account';
 
 interface TradingState {

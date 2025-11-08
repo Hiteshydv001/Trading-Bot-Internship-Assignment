@@ -12,7 +12,7 @@ import {
   StopStrategyResponse,
   SystemStatus,
   Order,
-} from '@/lib/types';
+} from '../lib/types';
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api/v1',
