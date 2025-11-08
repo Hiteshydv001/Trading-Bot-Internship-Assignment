@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+python-binance
+pydantic
+pydantic-settings
+python-dotenv
+psutil
+websockets # For WebSocket communication (though python-binance might pull it)
